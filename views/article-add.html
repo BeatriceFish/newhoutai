@@ -78,7 +78,8 @@
             <div class="layui-form-item layui-form-text">
               <label class="layui-form-label">内容</label>
               <div class="layui-input-block">
-                <textarea name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+                <!-- <textarea name="content" id="content" placeholder="请输入内容" class="layui-textarea"></textarea> -->
+                <div id="content"></div>
               </div>
             </div>
             <div class="layui-form-item">
@@ -98,7 +99,13 @@
 <script src="/public/layui/layui.js"></script>
 <script src="/public/js/nprogress.js"></script>
 <script src="/public/js/util.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
 <script>
+const E = window.wangEditor
+const editor = new E('#content')
+editor.config.uploadImgShowBase64 = true;
+editor.create()
+
 layui.use(['element','form','layer','upload'], function(){
   var element = layui.element;
   var layer = layui.layer;
@@ -120,8 +127,8 @@ layui.use(['element','form','layer','upload'], function(){
   })
 
   form.on('submit(formDemo)', function(data){
-    // layer.msg(JSON.stringify(data.field));
     let formData = data.field;
+    formData.content = editor.txt.html();
     $.post('/postart',formData,({errcode,message})=>{
       if(errcode == 0){
         location.href = '/artindex';
@@ -131,7 +138,7 @@ layui.use(['element','form','layer','upload'], function(){
     return false;
   });
 
-  function loadCat(){
+  function loadCate(){
     $.get('/getCate',function(res){
       let optionStr = `<option value=""></option>`;
       res.forEach(v=>{

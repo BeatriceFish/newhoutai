@@ -33,8 +33,8 @@ ArticleCont.artAdd = (req,res)=>{
 }
 
 ArticleCont.postArt =async (req,res)=>{
-    let {title,cat_id,status,content} = req.body
-    let sql = `insert into article(title,content,cat_id,status,cover,publish_date) value('${title}','${content}',${cat_id},${status},'${cover}',now())`;
+    let {title,cat_id,status,cover,content} = req.body
+    let sql = `insert into article(title,content,cat_id,status,cover,publish_date) values('${title}','${content}',${cat_id},${status},'${cover}',now())`;
     let result = await model(sql)
     if(result.affectedRows){
         res.json(addsucc)
@@ -43,6 +43,19 @@ ArticleCont.postArt =async (req,res)=>{
     }
     res.json(req.body)
 }
+
+// ArticleCont.postArt = async (req,res)=>{
+//     let {title,cat_id,status,content,cover} = req.body;
+//     let username = req.session.userInfo.username
+//     let sql = `insert into article(title,content,author,cat_id,status,cover,publish_date)
+//                 values('${title}','${content}','${username}',${cat_id},${status},'${cover}',now())`;
+//     let result = await model(sql)
+//     if(result.affectedRows){
+//         res.json(addsucc)
+//     }else{
+//         res.json(addfail)
+//     }
+// }
 
 ArticleCont.artEdit = (req,res)=>{
     res.render('article-edit.html')
