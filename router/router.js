@@ -39,6 +39,12 @@ router.get('/allarticle',ArtCont.allArticle)
 //删除文章
 router.post('/delArticle',ArtCont.delArticle)
 
+router.get('/artedit',ArtCont.artEdit)
+
+router.get('/artadd',ArtCont.artAdd)
+
+router.post('/postart',ArtCont.postArt)
+
 router.all('*',(req,res)=>{
     res.json({errcode:10004,message:"请求错误"})
 })

@@ -14,6 +14,11 @@
   <div class="layui-body">
     <div style="padding: 15px;">
         <h2>文章管理</h2>
+        <div>
+          <!-- <button type="button" id="add"  class="layui-btn">
+            <i class="layui-icon">&#xe608;</i> 添加
+          </button> -->
+        </div>
         <table class="layui-hide" id="test" lay-filter="test"></table>
     </div>
     <script type="text/html" id="barDemo">
@@ -89,7 +94,7 @@ layui.use(['element','table'], function(){
     break;
 
     case "edit":
-      
+    edit(art_id)  
     break;  
   }
 
@@ -111,6 +116,14 @@ layui.use(['element','table'], function(){
       },function(){})
     });
   }
+
+  function edit(art_id){
+    location.href = `/artedit?art_id=${art_id}`
+  }
+
+  $("#add").on('click',function(){
+    location.href = '/artadd'
+  })
 });
 });
 </script>

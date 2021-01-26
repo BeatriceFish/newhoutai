@@ -7,7 +7,7 @@ const {delsucc,delfail,exception,argsfail,addsucc,addfail,getsucc,getfail,updsuc
 ArticleCont.allArticle = async (req,res)=>{
     let {page,limit:pagesize} = req.query;
     let offset = (page - 1)*pagesize;
-    let sql = `select * from article limit ${offset},${pagesize}`;
+    let sql = `select * from article order by art_id desc limit ${offset},${pagesize}`;
     let sql2 = `select count(*) as count from article`;
     let data = await model(sql)
     let datacount = await model(sql2)
@@ -26,5 +26,28 @@ ArticleCont.delArticle = async (req,res)=>{
     }
 
 }
+
+ArticleCont.artAdd = (req,res)=>{
+    res.render('article-add.html')
+}
+
+ArticleCont.postArt =async (req,res)=>{
+    let {title,cat_id,status,content} = req.body
+    let sql = `insert into article(title,content,cat_id,status) value('${title}','${content}',${cat_id},${status})`;
+    let result = await model(sql)
+    if(result.affectedRows){
+        res.json(addsucc)
+    }else{
+        res.json(addfail)
+    }
+    res.json(req.body)
+}
+
+ArticleCont.artEdit = (req,res)=>{
+    res.render('article-edit.html')
+}
+
+
+
 
 module.exports = ArticleCont
