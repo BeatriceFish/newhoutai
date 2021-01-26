@@ -14,6 +14,7 @@
     <div style="padding: 15px;">
       <h2 style="text-align: center;margin: 10px;">文章添加</h2>
         <form class="layui-form" action="" lay-filter="formDemo">
+          <input type="hidden" name="cover" id="cover" >
             <div class="layui-form-item">
               <label class="layui-form-label">标题</label>
               <div class="layui-input-inline">
@@ -26,9 +27,16 @@
             <div class="layui-form-item">
               <label class="layui-form-label">文章封面</label>
               <div class="layui-input-inline">
-                <button type="button" class="layui-btn" id="test1">
+                <button type="button" class="layui-btn" id="heartshow">
                   <i class="layui-icon">&#xe67c;</i>上传图片
                 </button>
+              </div>
+            </div>
+
+            <div class="layui-form-item">
+              <label class="layui-form-label">预览</label>
+              <div class="layui-input-inline">
+                <img src="" alt="" id="yulang">
               </div>
             </div>
             <!-- <div class="layui-form-item">
@@ -91,10 +99,25 @@
 <script src="/public/js/nprogress.js"></script>
 <script src="/public/js/util.js"></script>
 <script>
-layui.use(['element','form','layer'], function(){
+layui.use(['element','form','layer','upload'], function(){
   var element = layui.element;
   var layer = layui.layer;
   var form = layui.form;
+  var upload = layui.upload;
+
+  var uploadInst = upload.render({
+    elem:'#heartshow',
+    url:'/upload/',
+    done:function({code,message,src}){
+      if(code==0){
+        $('#yulang').attr('src',src).css('width','80')
+        $('#cover').val(src)
+      }
+    },
+    error:function(){
+
+    }
+  })
 
   form.on('submit(formDemo)', function(data){
     // layer.msg(JSON.stringify(data.field));

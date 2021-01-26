@@ -6,6 +6,7 @@ const router = require('./router/router.js')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/public',express.static(path.join(__dirname,'public')));
+app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 const artTemplate = require('art-template'); 
 const express_template = require('express-art-template');
 app.set('views', __dirname + '/views/');

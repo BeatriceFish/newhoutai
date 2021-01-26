@@ -1,4 +1,6 @@
 let express = require('express');
+var multer = require('multer')
+var upload = multer({dest: 'uploads/'})
 let router = express.Router();
 let path = require('path')
 const CateController = require('../controller/CateController.js');
@@ -44,6 +46,8 @@ router.get('/artedit',ArtCont.artEdit)
 router.get('/artadd',ArtCont.artAdd)
 
 router.post('/postart',ArtCont.postArt)
+
+router.post('/upload',upload.single('file'),ArtCont.upload)
 
 router.all('*',(req,res)=>{
     res.json({errcode:10004,message:"请求错误"})
