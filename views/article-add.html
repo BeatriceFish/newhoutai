@@ -128,7 +128,8 @@ layui.use(['element','form','layer','upload'], function(){
 
   form.on('submit(formDemo)', function(data){
     let formData = data.field;
-    formData.content = editor.txt.html();
+    formData.content = editor.txt.html(); //获取编辑器内容
+    // 发送ajax请求，入库数据即可
     $.post('/postart',formData,({errcode,message})=>{
       if(errcode == 0){
         location.href = '/artindex';
