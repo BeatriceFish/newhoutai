@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Login </title>
+    <link rel="stylesheet" href="/public/css/login.css">
+</head>
+<body>
+    <div class="login">
+        <h1>文章管理系统</h1>
+        <form method="post">
+            <input type="text" name="u" placeholder="用户名" required="required" class="username1"/>
+            <input type="password" name="p" placeholder="密码" required="required" class="password1"/>
+            <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
+        </form>
+    </div>
+    <script src="/public/js/jquery.js"></script>
+    <script src="/public/layui/layui.all.js"></script>
+    <script>
+        let layer = layui.layer
+
+        $('.btn').on('click',function(){
+            let username = $.trim($(".username1").val())
+            let password = $.trim($(".password1").val())
+            if(username == "" || password == ''){
+                layer.msg('用户名和密码不能为空')
+                return;
+            }
+
+            var index = layer.load(1,{
+                shade:[0.5,'#333']
+            })
+
+            $.post('/signin',{username,password},(res)=>{
+            layer.close(index)
+            let {errcode,message} = res;
+            if(errcode==0){
+                layer.msg(`欢迎：${username}回家`)
+                // 把用户名存储到本地存储，实现跨页面共享数据
+                localStorage.setItem('username',username)
+                location.href = '/'
+            }else{
+                layer.msg(message)
+            }
+            
+        },'json')
+
+        })
+    </script>
+</body>
+</html>

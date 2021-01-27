@@ -3,16 +3,19 @@ var multer = require('multer')
 var upload = multer({dest: 'uploads/'})
 let router = express.Router();
 let path = require('path')
+const UserController = require('../controller/UserController.js');
 const CateController = require('../controller/CateController.js');
 const ArtCont = require('../controller/ArtCont.js');
 router.get(/^\/$|^\/admin$/,(req,res)=>{
-    res.render('index.html')
+    let data = {
+        userInfo:req.session.userInfo
+    }
+    res.render('index.html',data)
 })
 //文章列表
 router.get('/artindex',CateController.artindex)
 // 数据
 router.get('/data',(req,res)=>{
-    // res.render('cate-data.html')
     res.sendFile(path.join(__dirname,'../views/cate-data.html'))
 })
 //渲染后台分类列表页面
@@ -43,11 +46,32 @@ router.post('/delArticle',ArtCont.delArticle)
 
 router.get('/artedit',ArtCont.artEdit)
 
-router.get('/artadd',ArtCont.artAdd)
+// router.get('/artadd',ArtCont.artAdd)
 
 router.post('/postart',ArtCont.postArt)
 
 router.post('/upload',upload.single('file'),ArtCont.upload)
+
+router.post('/updArt',ArtCont.updArt)
+
+router.get('/login',(req,res)=>{
+    if(req.session.userInfo){
+        res.redirect('/')
+        return
+    }
+    res.render('login.html')
+})
+
+router.post('/signin',UserController.signin)
+//退出登录
+router.get('/out',(req,res)=>{
+    req.session.destroy(err=>{
+        if(err){
+            throw err
+        }
+    })
+    res.redirect('/login')
+})
 
 router.all('*',(req,res)=>{
     res.json({errcode:10004,message:"请求错误"})

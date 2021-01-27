@@ -34,7 +34,7 @@ ArticleCont.artAdd = (req,res)=>{
 
 ArticleCont.postArt =async (req,res)=>{
     let {title,cat_id,status,cover,content} = req.body
-    let sql = `insert into article(title,content,cat_id,status,cover,publish_date) values('${title}','${content}',${cat_id},${status},'${cover}',now())`;
+    let sql = `insert into article(title,content,cat_id,status,cover) values('${title}','${content}',${cat_id},${status},'${cover}')`;
     let result = await model(sql)
     if(result.affectedRows){
         res.json(addsucc)
@@ -46,9 +46,9 @@ ArticleCont.postArt =async (req,res)=>{
 
 // ArticleCont.postArt = async (req,res)=>{
 //     let {title,cat_id,status,content,cover} = req.body;
-//     let username = req.session.userInfo.username
-//     let sql = `insert into article(title,content,author,cat_id,status,cover,publish_date)
-//                 values('${title}','${content}','${username}',${cat_id},${status},'${cover}',now())`;
+//     // let username = req.session.userInfo.username
+//     let sql = `insert into article(title,content,cat_id,status,cover,publish_date)
+//                 values('${title}','${content}',${cat_id},${status},'${cover}',now())`;
 //     let result = await model(sql)
 //     if(result.affectedRows){
 //         res.json(addsucc)
@@ -77,6 +77,20 @@ ArticleCont.upload = (req,res)=>{
     res.json({code:1,message:'没有上传文件'})
     }
     }
+
+ArticleCont.updArt =async (req,res)=>{
+    let {cover,title,cat_id,art_id,content,status,oldCover} = req.body
+    
+    let sql = `update article set title = '${title}',content='${content}',cover='${cover}',cat_id=${cat_id},status=${status} where art_id = ${art_id}`;
+    let resdata = await model(sql)
+    if(resdata.affectedRows){
+        let oldpath = oldCover
+        cover && fs.unlinkSync(oldpath)
+        res.json(addsucc)
+    }else{
+        res.json(addfail)
+    }
+}
 
 
 
