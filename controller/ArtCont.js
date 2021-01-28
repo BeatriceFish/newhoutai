@@ -29,7 +29,7 @@ ArticleCont.delArticle = async (req,res)=>{
 }
 
 ArticleCont.artAdd = (req,res)=>{
-    res.render('article-add.html')
+    res.render('article-add.html',data)
 }
 
 ArticleCont.postArt =async (req,res)=>{

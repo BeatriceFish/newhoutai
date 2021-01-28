@@ -17,13 +17,27 @@
       <li class="layui-nav-item">
         <a href="javascript:;">
           <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-          {{username}}-{{avatar}}
+          <span id="username">IM</span>
         </a>
         <dl class="layui-nav-child">
           <dd><a href="">基本资料</a></dd>
           <dd><a href="">安全设置</a></dd>
         </dl>
       </li>
-      <li class="layui-nav-item"><a onclick="return confirm('确认退出吗')" href="out">退了</a></li>
+      <li class="layui-nav-item"><a id="logout" href="javascript:;">退了</a></li>
     </ul>
   </div>
+  <script src="/public/js/jquery.js"></script>
+  <script src="/public/layui/layui.all.js"></script>
+  <script>
+    let layer = layui.layer
+    document.querySelector('#username').innerHTML = localStorage.getItem('username')
+
+    document.querySelector('#logout').onclick = function(){
+      $.get('/logout',(res)=>{
+        localStorage.clear()
+        layer.msg(res.message)
+        location.href = '/login'
+      })
+    }
+  </script>

@@ -4,13 +4,23 @@ var upload = multer({dest: 'uploads/'})
 let router = express.Router();
 let path = require('path')
 const UserController = require('../controller/UserController.js');
+const model = require('../model/model.js');
 const CateController = require('../controller/CateController.js');
 const ArtCont = require('../controller/ArtCont.js');
+router.get('/cateCount',async (req,res)=>{
+    let sql = `select count(*) total ,t2.name,t1.cat_id from article t1 
+                left join category t2 
+                on t1.cat_id = t2.cat_id 
+                group by  t1.cat_id`;
+    let data = await model(sql);
+    res.json(data)
+})
 router.get(/^\/$|^\/admin$/,(req,res)=>{
-    let data = {
-        userInfo:req.session.userInfo
-    }
-    res.render('index.html',data)
+    // let data = {
+    //     userInfo:req.session.userInfo
+    // }
+    // res.render('index.html',data)
+    res.render('index.html')
 })
 //文章列表
 router.get('/artindex',CateController.artindex)
@@ -64,14 +74,16 @@ router.get('/login',(req,res)=>{
 
 router.post('/signin',UserController.signin)
 //退出登录
-router.get('/out',(req,res)=>{
+router.get('/logout',(req,res)=>{
     req.session.destroy(err=>{
         if(err){
             throw err
         }
     })
-    res.redirect('/login')
+    res.json({message:'退出成功'})
 })
+
+
 
 router.all('*',(req,res)=>{
     res.json({errcode:10004,message:"请求错误"})
