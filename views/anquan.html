@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>layout 后台大布局</title>
+  <link rel="stylesheet" href="/public/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">layui 后台布局</div>
+        <ul class="layui-nav layui-layout-left">
+          <li class="layui-nav-item"><a href="">控制台</a></li>
+          <li class="layui-nav-item"><a href="">商品管理</a></li>
+          <li class="layui-nav-item"><a href="">用户</a></li>
+          <li class="layui-nav-item">
+            <a href="javascript:;">其它系统</a>
+            <dl class="layui-nav-child">
+              <dd><a href="">邮件管理</a></dd>
+              <dd><a href="">消息管理</a></dd>
+              <dd><a href="">授权管理</a></dd>
+            </dl>
+          </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+          <li class="layui-nav-item">
+            <a href="javascript:;">
+              <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+              <span id="username">IM</span>
+            </a>
+            <dl class="layui-nav-child">
+              <dd><a href="">基本资料</a></dd>
+              <dd><a href="/anquan">安全设置</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item"><a id="logout" href="javascript:;">退了</a></li>
+        </ul>
+      </div>
+      <script src="/public/js/jquery.js"></script>
+      <script src="/public/layui/layui.all.js"></script>
+      <script>
+        let layer = layui.layer
+        document.querySelector('#username').innerHTML = localStorage.getItem('username')
+    
+        document.querySelector('#logout').onclick = function(){
+          $.get('/logout',(res)=>{
+            localStorage.clear()
+            layer.msg(res.message)
+            location.href = '/login'
+          })
+        }
+      </script>
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">文章管理</a>
+          <dl class="layui-nav-child">
+                <dd><a href="/catindex">栏目管理</a></dd>
+                <dd><a href="/artindex">文章管理</a></dd>
+                <dd><a href="/artadd">文章添加</a></dd>
+                <!-- <dd><a href="/data">查看</a></dd> -->
+              </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">用户管理</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">用户列表</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"><a href="">云市场</a></li>
+        <li class="layui-nav-item"><a href="">发布商品</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="layui-body">
+    <div style="padding: 15px;">
+      <h2 style="text-align: center;margin: 10px;">修改密码</h2>
+        <form class="layui-form" action="" lay-filter="formDemo">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                    <input type="username" name="username" id="username" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+          
+            <div class="layui-form-item">
+              <label class="layui-form-label">修改密码</label>
+              <div class="layui-input-inline">
+                <input type="text" name="password" required  lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                
+              </div>
+            </div>
+        </form>
+    </div>
+  </div>
+  <div class="layui-footer">
+    © layui.com - 底部固定区域
+  </div>
+</div>
+<script src="/public/js/moment.js"></script>
+<script src="/public/js/jquery.js"></script>
+<!-- <script src="/public/js/util.js"></script> -->
+<script src="/public/layui/layui.js"></script>
+<script src="/public/js/nprogress.js"></script>
+<script src="/public/js/util.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+<script>
+const E = window.wangEditor
+const editor = new E('#content')
+editor.config.uploadImgShowBase64 = true;
+editor.create()
+
+layui.use(['element','form','layer','upload'], function(){
+  var element = layui.element;
+  var layer = layui.layer;
+  var form = layui.form;
+  var upload = layui.upload;
+
+  var uploadInst = upload.render({
+    elem:'#heartshow',
+    url:'/upload/',
+    done:function({code,message,src}){
+      if(code==0){
+        $('#yulang').attr('src',src).css('width','80')
+        $('#cover').val(src)
+      }
+    },
+    error:function(){
+
+    }
+  })
+
+  form.on('submit(formDemo)', function(data){
+    let formData = data.field;
+    // 发送ajax请求，入库数据即可
+    $.post('/repsd',formData,({errcode,message})=>{
+      if(errcode == 0){
+        layer.msg('修改成功')
+      }
+      layer.msg(message)
+    },'json')
+    return false;
+  });
+
+  function loadCate(){
+    $.get('/getCate',function(res){
+      let optionStr = `<option value=""></option>`;
+      res.forEach(v=>{
+        optionStr += `<option value="${v.cat_id}">${v.name}</option>`
+      })
+      $("select[name='cat_id']").html(optionStr)
+      // form.render('select','sel')
+    },'json')
+  }
+  loadCate()
+
+  form.val('formDemo',{
+    title:'BT',
+    status:1,
+    cat_id:1
+  })
+  
+});
+</script>
+</body>
+</html>

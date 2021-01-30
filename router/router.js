@@ -83,6 +83,12 @@ router.get('/logout',(req,res)=>{
     res.json({message:'退出成功'})
 })
 
+//安全设置
+router.get('/anquan',(req,res)=>{
+    res.sendFile(path.join(__dirname,'../views/anquan.html'))
+})
+
+router.post('/repsd',UserController.repsd)
 
 
 router.all('*',(req,res)=>{

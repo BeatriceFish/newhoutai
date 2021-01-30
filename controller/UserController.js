@@ -20,4 +20,21 @@ UserController.signin = async (req,res)=>{
 }
 
 
+UserController.repsd = async (req,res)=>{
+    let {username,password} = req.body
+    console.log(username,password);
+    let sql = `UPDATE users SET PASSWORD=${password} WHERE username='${username}';`
+    console.log(sql);
+    let data = await model(sql);
+    console.log(data);
+    console.log(data.length);
+    console.log(data.affectedRows);
+    if(data.affectedRows>0){
+        
+        res.json({errcode:0,message:'修改成功'})
+    }else{
+        res.json({errcode:10008,message:'修改失败'})
+    }
+}
+
 module.exports = UserController;
