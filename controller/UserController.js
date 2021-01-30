@@ -37,4 +37,39 @@ UserController.repsd = async (req,res)=>{
     }
 }
 
+UserController.touxiangjiazai = async (req,res)=>{
+    let path = req.query
+    
+        // 2.查询数据库
+        let sql = `SELECT avatar FROM users where username = 'admin'`;
+        let data = await model(sql);
+        console.log(data[0].avatar);
+        // 3.返回数据
+        if(data){
+            //  data[0].errcode = 0;
+             res.json({errcode:0,message:data[0].avatar})
+        }else{
+            res.json({errcode:10008,message:"获取错误"})
+        }
+    
+}
+
+UserController.xiugaitouxiang = async (req,res)=>{
+    let {cover} = req.body
+    console.log(cover);
+    let sql = `UPDATE users SET avatar='${cover}' WHERE username='admin'`;
+    console.log(sql);
+    let data = await model(sql);
+    console.log(data);
+    console.log(data.length);
+    console.log(data.affectedRows);
+    if(data.affectedRows>0){
+        
+        res.json({errcode:0,message:'修改成功'})
+    }else{
+        res.json({errcode:10008,message:'修改失败'})
+    }
+}
+
+
 module.exports = UserController;

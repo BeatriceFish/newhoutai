@@ -90,6 +90,13 @@ router.get('/anquan',(req,res)=>{
 
 router.post('/repsd',UserController.repsd)
 
+router.get('/touxiang',(req,res)=>{
+    res.sendFile(path.join(__dirname,'../views/touxiang.html'))
+})
+
+router.get('/touxiangjiazai',UserController.touxiangjiazai)
+
+router.post('/xiugaitouxiang',UserController.xiugaitouxiang)
 
 router.all('*',(req,res)=>{
     res.json({errcode:10004,message:"请求错误"})

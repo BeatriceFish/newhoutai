@@ -16,11 +16,12 @@
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
         <a href="javascript:;">
-          <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+          <img src="http://t.cn/RCzsdCq" class="layui-nav-img" id="touxiang">
           <span id="username">IM</span>
         </a>
         <dl class="layui-nav-child">
           <dd><a href="">基本资料</a></dd>
+          <dd><a href="/touxiang">修改头像</a></dd>
           <dd><a href="/anquan">安全设置</a></dd>
         </dl>
       </li>
@@ -40,4 +41,16 @@
         location.href = '/login'
       })
     }
+
+    
+
+    function touxiang(){
+      $.get('/touxiangjiazai',{username:'admin'},function(data){
+      // alert(data.message)
+      $('#touxiang').attr('src',data.message)
+    })
+    }
+    touxiang()
+
+    
   </script>
